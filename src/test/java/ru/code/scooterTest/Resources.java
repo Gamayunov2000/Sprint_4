@@ -1,4 +1,4 @@
-package my.code.scooterTest;
+package ru.code.scooterTest;
 
 public class Resources {
     // Ответы на часто задаваемые вопросы

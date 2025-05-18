@@ -1,15 +1,21 @@
-package my.code.scooterTest;
+package ru.code.scooterTest;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 
 public class HomePageScooter {
     private final WebDriver driver;
+    // ИЗМЕНЕНИЕ: Перенес локатор секции FAQ в Page Object и сделал private
+    private final By FAQ_SECTION = By.xpath(".//div[@class='accordion']");
 
+    // ИЗМЕНЕНИЕ: Убрал модификатор static, сделал поля приватными
     // FAQ Section Locators
-    private static final By[] FAQ_QUESTIONS = {
+    private final By[] FAQ_QUESTIONS = {
             // Сколько это стоит? И как оплатить?
             By.xpath(".//div[@class='accordion__item'][1]"),
             // Хочу сразу несколько самокатов! Так можно?
@@ -28,7 +34,8 @@ public class HomePageScooter {
             By.xpath(".//div[@class='accordion__item'][8]")
     };
 
-    private static final By[] FAQ_ANSWERS = {
+    // ИЗМЕНЕНИЕ: Убрал модификатор static, сделал поля приватными
+    private final By[] FAQ_ANSWERS = {
             // Сутки — 400 рублей. Оплата курьеру — наличными или картой.
             By.id("accordion__panel-0"),
             // Пока что у нас так: один заказ — один самокат. Если хотите покататься с друзьями,
@@ -63,12 +70,30 @@ public class HomePageScooter {
         this.driver = driver;
     }
 
+    // ИЗМЕНЕНИЕ: Добавил метод для скролла к секции FAQ
+    public void scrollToFAQSection() {
+        WebElement faqSection = driver.findElement(FAQ_SECTION);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", faqSection);
+    }
+
     // Метод для раскрытия вопросов
     public void expandFaqQuestion(int questionNumber) {
         if (questionNumber < 1 || questionNumber > FAQ_QUESTIONS.length) {
             throw new IllegalArgumentException("Неверный номер вопроса");
         }
-        driver.findElement(FAQ_QUESTIONS[questionNumber - 1]).click();
+        //driver.findElement(FAQ_QUESTIONS[questionNumber - 1]).click();
+
+        // ИЗМЕНЕНИЕ: Добавил явное ожидание для кликабельности элемента
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement question = wait.until(
+                ExpectedConditions.elementToBeClickable(FAQ_QUESTIONS[questionNumber - 1])
+        );
+        question.click();
+
+        // ИЗМЕНЕНИЕ: Добавил ожидание появления ответа
+        wait.until(
+                ExpectedConditions.visibilityOfElementLocated(FAQ_ANSWERS[questionNumber - 1])
+        );
     }
 
     public String getFaqAnswerText(int answerNumber) {

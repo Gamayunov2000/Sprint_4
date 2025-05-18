@@ -1,4 +1,4 @@
-package my.code.scooterTest;
+package ru.code.scooterTest;
 
 import org.hamcrest.MatcherAssert;
 import org.openqa.selenium.By;

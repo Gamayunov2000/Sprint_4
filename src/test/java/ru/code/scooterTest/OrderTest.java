@@ -1,4 +1,4 @@
-package my.code.scooterTest;
+package ru.code.scooterTest;
 
 import org.junit.After;
 import org.junit.Test;
@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 //import org.openqa.selenium.firefox.FirefoxDriver;
 
-import static my.code.scooterTest.Resources.ORDER_STATUS_HEADER;
+import static ru.code.scooterTest.Resources.ORDER_STATUS_HEADER;
 
 @RunWith(Parameterized.class)
 public class OrderTest {
